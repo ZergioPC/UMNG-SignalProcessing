@@ -1,6 +1,6 @@
-#local
-share/
+#Guias y talleres 
 talleres/
+audios/
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,venv,windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,python,venv,windows,linux,macos
@@ -58,6 +58,7 @@ Temporary Items
 __pycache__/
 *.py[cod]
 *$py.class
+share/
 
 # C extensions
 *.so
