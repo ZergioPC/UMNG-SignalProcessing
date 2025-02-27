@@ -29,7 +29,7 @@ def ondaSeno(Fm,w,T,a=1,phi=0):
     s = []
     for t in range(Fm*T):
         s.append((a*np.sin((2*np.pi/Fm)*w*t))+phi)   #se convierte en radianes
-    return np.array(s,dtype=np.int16)
+    return np.array(s)
 
 def ondaCuadrada(Fm,w,T,a=1,phi=0):
     s = []
@@ -38,7 +38,7 @@ def ondaCuadrada(Fm,w,T,a=1,phi=0):
             s.append(-1 * a)
         else:
             s.append(1 * a)
-    return np.array(s,dtype=np.int16)
+    return np.array(s)
 
 # Generar una señal de 3 segundos a 8khz de muestreo y 2hz de frecuencia
 
