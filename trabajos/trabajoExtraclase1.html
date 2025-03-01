@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Trabajo Extraclase - Semana 1</title>
+    <style>
+        :root{
+            --color-1: #f8f2de;
+            --color-2: #ecdcbf;
+            --color-3: #d84040;
+            --color-4: #a31d1d;
+            --color-blue: #373b78;
+            --color-ylow: #fcf6b6;
+        }
+        *{
+            font-family: Verdana;
+        }
+        body {
+            background-color: var(--color-3);
+        }
+        header, main, footer{
+            margin: 20px;
+            padding: 10px 20px;
+        }
+        header{
+            background-color: var(--color-1);
+        }
+        header > p {
+            margin-top: 0;
+            font-size: 1.4rem;
+            text-align: center;
+            font-style: italic;
+            font-weight: bold;
+        }
+        main{
+            background-color: var(--color-2);
+        }
+        section{
+            margin: 20px 10px;
+            padding: 20px 40px;
+            background-color: var(--color-1);
+        }
+        section p {
+            text-align: justify;
+        }
+        footer{
+            background-color: #a31d1d;
+            font-weight: bold;
+            text-align: center;
+        }
+        footer a {
+            color: var(--color-2);
+        }
+
+        footer a:hover{
+            color: var(--color-1);
+        }
+        code{
+            font-family: monospace;
+            font-size: 1rem;
+        }
+        h1{
+            margin-bottom: 10px;
+            color: var(--color-4);
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: bolder;
+            font-size: 60px;
+        }
+        li{
+            text-align: justify;
+        }
+        .code{
+            margin: 20px 30px;
+            padding: 20px;
+            color: var(--color-blue);
+            box-shadow: black 3px 3px 10px;
+            background-color: var(--color-ylow);
+        }
+    </style>
+</head>
+<body>
+    <body>
+        <header>
+            <h1>Trabajo Extraclase<br>Semana 1</h1>
+            <p>Sergio Palacios - 6000806</p>
+        </header>
+        <main>
+            <section>
+                <h2>1. Defina Decibeles</h2>
+                <p>Los Decibelios son una unidad de medida que permite establecer una relación entre dos unidades de medida asociadas al sonido, como la presión del aire o la potenicia eléctica, para ello requiere de un valor de medida y un valor de referencia.</p>
+                <p style="text-align: center; font-size: 2rem; font-family: 'Courier New';">
+                    <math>
+                        <mrow>
+                            <mi>db</mi>
+                            <mo>=</mo>
+                            <mo>10</mo>
+                            <msub>
+                            <mi>log</mi>
+                            <mn>10</mn>
+                            </msub>
+                            <mo>(</mo>
+                            <mfrac>
+                                <mi>Valor de Medida</mi>
+                                <mi>Valor de Referencia</mi>
+                            </mfrac>
+                            <mo>)</mo>
+                        </mrow>
+                    </math>
+                </p>
+            </section>
+            <section>
+                <h2>2. ¿Qué tipos de decibeles se usan comúnmente en el audio?</h2>
+                <p>En el mundo de la grabación de audio, se han usado popularmente dos tipos de decibeles</p>
+                <ol>
+                    <li>
+                        <h4>DBFS: Decibelios <i>Full Scale</i></h4>
+                        <p>Usados en el mundo digital, que por su naturaleza de almacenamiento de información, solo permiten valores de 0 hasta 1, por lo tanto, los decibelios van desde -&#8734; hasta 0</p>
+                        <p style="text-align: center;">
+                            <math>
+                                <mi>db</mi>
+                            <mo>=</mo>
+                            <mo>10</mo>
+                            <msub>
+                            <mi>log</mi>
+                            <mn>10</mn>
+                            </msub>
+                                <mo>(</mo>
+                                <mfrac>
+                                    <mi>V</mi>
+                                    <msub>
+                                    <mi>V</mi>
+                                    <mn>ref</mn>
+                                    </msub>
+                                </mfrac>
+                                <mo>)</mo>
+                                </mrow>
+                            </math>
+                        </p>
+                        <p>donde
+                            <ul>
+                                <li><math><mi>V</mi></math> es el voltaje de la señal medida</li>
+                                <li><math><msub><mi>V</mi><mn>ref</mn></msub></math> es el voltaje de referencia</li>
+                            </ul>
+                        </p>
+                    </li>
+                    <li>
+                        <h4>DBVU: Decibelios <i>Volume Unit</i></h4>
+                        <p>Usados al trabajar de forma análoga, al ser creados antes de la revolición digital en la música, buscaban un estandar para garantizar un nivel de calidad en el voltaje recibido en las grabaciones, por ello, el 0 es un valor estandar permitiendo valores tanto positivos como negativos</p>
+                        <p style="text-align: center;">
+                            <math>
+                                <mi>db</mi>
+                            <mo>=</mo>
+                            <mo>10</mo>
+                            <msub>
+                            <mi>log</mi>
+                            <mn>10</mn>
+                            </msub>
+                                <mo>(</mo>
+                                <mfrac>
+                                    <mi>A</mi>
+                                    <msub>
+                                    <mi>A</mi>
+                                    <mn>max</mn>
+                                    </msub>
+                                </mfrac>
+                                <mo>)</mo>
+                                </mrow>
+                            </math>
+                        </p>
+                        <p>donde
+                            <ul>
+                                <li><math><mi>A</mi></math> es la amplitud <i>(en bits)</i> de la señal medida </li>
+                                <li><math><msub><mi>A</mi><mn>max</mn></msub></math> es la cantidad máxima de bits que permite almacenar información de la señal, dada por la formula <math><msup><mi>2</mi><mn>n-1</mn></msup><mi>-1</mi></math></math> donde<math><mo>n</mo></math>equivale a la cantidad de bits destinados <i>(8bits, 16bits, etc.)</i></li>
+                            </ul>
+                        </p>
+                    </li>
+                </ol>
+            </section>
+            <section>
+                <h2>3. Desarrolle un código en Python que permita convertir un valor dado a dBFS, use como referencia 16 bits</h2>
+                <p>El archivo en python puede encotrarlo en el <a href="https://github.com/ZergioPC/UMNG-SignalProcessing" target="_blank">Repositorio de GitHub</a></p>
+                <div class="code">
+                    <code>
+                    import numpy as np<br>
+                    import matplotlib.pyplot as plt<br><br>
+                    def toDBFS(A):<br>
+                    &emsp;&emsp;return 10*np.log10(A/32767)<br><br>
+                    def ejercicio3():<br>
+                    &emsp;&emsp;amplitud = input("ingrese la amplitud: ")<br>
+                    &emsp;&emsp;amplitud = int(amplitud)<br><br>
+                    &emsp;&emsp;while amplitud > (2**15-1):<br>
+                    &emsp;&emsp;&emsp;&emsp;print("Error: La amplitud no puede superar los 16bits de profundidad (32.767)\n")<br>
+                    &emsp;&emsp;&emsp;&emsp;amplitud = input("ingrese la amplitud: ")<br>
+                    &emsp;&emsp;&emsp;&emsp;amplitud = int(amplitud)<br>
+                    &emsp;&emsp;print(toDBFS("Su amplitud en dBFS equivale a: "+amplitud))<br><br>
+                    ejercicio3()
+                    </code>
+                </div>
+            </section>
+            <section>
+                <h2>4. Desarrolle un código que Genere una señal seno de 100Hz con un valor pico de -3dBFS</h2>
+                <p>El archivo en python puede encotrarlo en el <a href="https://github.com/ZergioPC/UMNG-SignalProcessing" target="_blank">Repositorio de GitHub</a></p>
+                <div class="code">
+                    <code>
+                    import numpy as np<br>
+                    import matplotlib.pyplot as plt<br><br>
+                    def toDBFS(A):<br>
+                    &emsp;&emsp;return 10*np.log10(A/32767)<br><br>
+                    def ondaSeno(Fm,w,T,a=1,phi=0):<br>
+                    &emsp;&emsp;s = []<br>
+                    &emsp;&emsp;for t in range(Fm*T):<br>
+                    &emsp;&emsp;&emsp;&emsp;s.append((a*np.sin((2*np.pi/Fm)*w*t))+phi)<br>
+                    &emsp;&emsp;return np.array(s)<br><br>
+                    def ejercicio4():<br>
+                    &emsp;&emsp;"""<br>
+                    &emsp;&emsp;-3 = 10*np.log(A/(2**15-1))<br>
+                    &emsp;&emsp;10**(-3/10) = A/(2**15-1)<br>
+                    &emsp;&emsp;A = (2**15-1)/10**(3/10)<br>
+                    &emsp;&emsp;A = 16442.40208...<br>
+                    &emsp;&emsp;"""<br><br>
+                    &emsp;&emsp;frequencia = 100<br>
+                    &emsp;&emsp;rta = (2**15-1)/10**(3/10)<br>
+                    &emsp;&emsp;onda = ondaSeno(44100,frequencia,1,a=rta)<br><br>
+                    &emsp;&emsp;plt.text(<br>
+                    &emsp;&emsp;&emsp;&emsp;400,0,"debemos usar una amplitud de 16442.40208",<br>
+                    &emsp;&emsp;&emsp;&emsp;ha='right',wrap=True,fontsize=10,backgroundcolor="#fff20030",color="#000000aa"<br>
+                    &emsp;&emsp;)<br>
+                    &emsp;&emsp;plt.text(<br>
+                    &emsp;&emsp;&emsp;&emsp;0,-10000,f"{rta} = {np.round(toDBFS(rta),decimals=3)} dBFS",<br>
+                    &emsp;&emsp;&emsp;&emsp;ha='left',wrap=True,fontsize=10,backgroundcolor="#fffff030",color="#000000aa"<br>
+                    &emsp;&emsp;)<br>
+                    &emsp;&emsp;plt.plot([i for i in range(len(onda[:441]))],onda[:441])<br>
+                    &emsp;&emsp;plt.show()<br><br>
+                    ejercicio4()<br>
+                    </code>
+                </div>
+            </section>
+            <section>
+                <h2>5. Desarrolle un código que Genere una señal cuadrada de 250Hz con un valor pico de -6dBFS</h2>
+                <p>El archivo en python puede encotrarlo en el <a href="https://github.com/ZergioPC/UMNG-SignalProcessing" target="_blank">Repositorio de GitHub</a></p>
+                <div class="code">
+                    <code>
+                    import numpy as np<br>
+                    import matplotlib.pyplot as plt<br><br>
+                    def toDBFS(A):<br>
+                    &emsp;&emsp;return 10*np.log10(A/32767)<br><br>
+                    def ondaCuadrada(Fm,w,T,a=1,phi=0):<br>
+                    &emsp;&emsp;s = []<br>
+                    &emsp;&emsp;for t in range(Fm*T):<br>
+                    &emsp;&emsp;&emsp;&emsp;if (a*np.sin((2*np.pi/Fm)*w*t)+phi < 0):<br>
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;s.append(-1 * a)<br>
+                    &emsp;&emsp;&emsp;&emsp;else:<br>
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;s.append(1 * a)<br>
+                    &emsp;&emsp;return np.array(s)<br><br>
+                    def ejercicio5():<br>
+                    &emsp;&emsp;"""<br>
+                    &emsp;&emsp;-6 = 10*np.log(A/(2**15-1))<br>
+                    &emsp;&emsp;10**(-6/10) = A/(2**15-1)<br>
+                    &emsp;&emsp;A = (2**15-1)/10**(6/10)<br>
+                    &emsp;&emsp;A = 8230.6982...<br>
+                    &emsp;&emsp;"""<br>
+                    &emsp;&emsp;frequencia = 250<br>
+                    &emsp;&emsp;rta = (2**15-1)/10**(6/10) <br>
+                    &emsp;&emsp;onda = ondaCuadrada(44100,frequencia,1,a=rta)<br><br>
+                    &emsp;&emsp;plt.text(<br>
+                    &emsp;&emsp;&emsp;&emsp;400,0,"debemos usar una amplitud de 8230.6982",<br>
+                    &emsp;&emsp;&emsp;&emsp;ha='right',wrap=True,fontsize=10,backgroundcolor="#fff20030",color="#000000aa"<br>
+                    &emsp;&emsp;)<br>
+                    &emsp;&emsp;plt.text(<br>
+                    &emsp;&emsp;&emsp;&emsp;0,-5000,f"{rta} = {np.round(toDBFS(rta),decimals=3)} dBFS",<br>
+                    &emsp;&emsp;&emsp;&emsp;ha='left',wrap=True,fontsize=10,backgroundcolor="#fffff030",color="#000000aa"<br>
+                    &emsp;&emsp;)<br>
+                    &emsp;&emsp;plt.plot([i for i in range(len(onda[:441]))],onda[:441])<br>
+                    &emsp;&emsp;plt.show()<br><br>
+                    ejercicio5()<br>
+                    </code>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p><a href="https://github.com/ZergioPC/UMNG-SignalProcessing" target="_blank">Link al Repositorio completo de GitHub</a></p>
+        </footer>
+    </body>
+</body>
+</html>
