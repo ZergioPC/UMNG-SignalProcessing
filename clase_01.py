@@ -43,16 +43,19 @@ def ondaCuadrada(Fm,w,T,a=1,phi=0):
 # Generar una señal de 3 segundos a 8khz de muestreo y 2hz de frecuencia
 
 muestreo = 44100   
-tiempo = 5
-freq = 440
+duracion = 5
+freq = 440.0
+amplitud = 0.5
 
-onda = ondaSeno(muestreo,freq,tiempo)
-#onda = ondaCuadrada(muestreo,freq,tiempo)
+#onda = ondaSeno(muestreo,freq,duracion,a=amplitud)
+onda = ondaCuadrada(muestreo,freq,duracion,a=amplitud)
 
-plt.plot([i for i in range(len(onda))],onda*32767)
-plt.show()
+tiempo = np.linspace(0,duracion,int(muestreo*duracion),endpoint=False)
 
-## CONVERSIÓN A .wav
-# Usamos 16 bits
+#plt.plot(tiempo,onda)
+#plt.show()
 
-wavfile.write('./audios/clase_1-OndaCuadrada.wav',muestreo,onda)
+## CONVERSIÓN A .wav en 16 bits
+
+onda_16bits = (onda*32767).astype(np.int16)
+wavfile.write('./audios/clase_1-OndaCuadrada.wav',muestreo,onda_16bits)
