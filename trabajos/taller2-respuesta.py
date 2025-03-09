@@ -17,6 +17,13 @@ def recta(x0,y0,m):
 def DBtoBYTE(db):
     return 10**(db/10)
 
+def menorList(listas):
+    size = len(listas[0])
+    for lista in listas:
+        if (len(lista) < size):
+            size = len(lista)
+    return size
+
 def ondaSeno(w,a,phi=0):
     Fm = 44100
     T = 3
@@ -95,85 +102,90 @@ class ejercicios:
         self.a = amplitud
         self.T1 = int(44100/freq1)
         self.T2 = int(44100/freq2)
+        self.titulo = ''
+
+    def graficar(self,label,xData,yData):
+        plt.figure(num="Taller 2 - Sergio Palacios") 
+        plt.title(self.titulo)
+        plt.xlabel('Tiempo')
+        plt.ylabel(label)
+        plt.plot(xData,yData) 
+        plt.show()
 
     def punto1(self):
         x = self.onda1(self.freq1,self.a)
         y = self.onda2(self.freq2,self.a)
 
         rta = (x + y)
-        tiempo = np.linspace(0,3,len(rta))
-
-        plt.plot(tiempo,rta)
-        plt.show()
+        tiempo = np.linspace(0,6,len(rta))
+        self.graficar('X[n] y Y[n]',tiempo,rta)
     
     def punto2(self):
         x = self.onda1(self.freq1,self.a)
         y = self.onda2(self.freq2,self.a)
 
         rta = (x + y)
+        rta = [-i for i in rta]
         
-        tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,[-i for i in rta])
-        plt.show()
+        tiempo = np.linspace(0,6,len(rta))
+        self.graficar('X[-n] y Y[-n]',tiempo,rta)
     
     def punto3(self):
         x = self.onda1(self.freq1,self.a)
-        x = [x[n] for n in range(len(x)) if(n%2==0)]
+        x = [x[2*n] for n in range(int(len(x)/2))]
 
         y = self.onda2(self.freq2,self.a)
-        y = [y[n] for n in range(len(y)) if(n%2==0)]
+        y = [y[2*n] for n in range(int(len(y)/2))]
 
         rta = (x + y)
         
         tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        self.graficar('X[2n] y Y[2n]',tiempo,rta)
 
     def punto4(self):
         x = self.onda1(self.freq1,self.a)
-        x = [x[n] for n in range(len(x)) if(n%3==0)]
+        x = [x[3*n] for n in range(int(len(x)/3))]
 
         y = self.onda2(self.freq2,self.a)
-        y = [y[n] for n in range(len(y)) if(n%3==0)]
+        y = [y[3*n] for n in range(int(len(y)/3))]
 
         rta = (x + y)
         
-        tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        tiempo = np.linspace(0,2,len(rta))
+        self.graficar('X[3n] y Y[3n]',tiempo,rta)
 
     def punto5(self):
         x = self.onda1(self.freq1,self.a)
+        x = [x[int(n/2)] for n in range(int(len(x)/2))]
+
         y = self.onda2(self.freq2,self.a)
+        y = [y[int(n/2)] for n in range(int(len(y)/2))]
 
         rta = (x + y)
         
-        tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,[i/2 for i in rta])
-        plt.show()
+        tiempo = np.linspace(0,12,len(rta))
+        self.graficar('X['+r'$\frac{n}{2}$'+'] y Y['+r'$\frac{n}{2}$'+']',tiempo,rta)
     
     def punto6(self):
         x = self.onda1(self.freq1,self.a)
         y = self.onda2(self.freq2,self.a)
         
-        size = len(x)
-        if(size > len(y)):
-            size = len(y)
-
+        size = menorList([x,y])
         rta = [(x[n]+y[n]) for n in range(size)]
 
         tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        self.graficar('X[n] + Y[n]',tiempo,rta)
 
     def punto7(self):
         x = self.onda1(self.freq1,self.a)
-        
-        rta = (x + [x[n] for n in range(len(x)) if(n%2==0)] + [x[n] for n in range(len(x)) if(n%3==0)])
+        x2 = [x[2*n] for n in range(int(len(x)/2))]
+        x3 = [x[3*n] for n in range(int(len(x)/3))]
 
-        tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        size = menorList([x,x2,x3])
+        rta = [(x[n]+x2[n]+x3[n]) for n in range(size)]
+
+        tiempo = np.linspace(0,5.5,len(rta))
+        self.graficar('X[n] + X[2n] + X[3n]',tiempo,rta)
 
     def punto8(self):
         x = self.onda1(self.freq1,self.a)
@@ -181,9 +193,8 @@ class ejercicios:
         
         rta = ([0.5*n for n in x] + [0.5*n for n in y])
 
-        tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        tiempo = np.linspace(0,6,len(rta))
+        self.graficar('0.5 X[n] y 0.5 Y[n]',tiempo,rta)
     
     def punto9(self):
         x = self.onda1(self.freq1,self.a)
@@ -194,25 +205,20 @@ class ejercicios:
         rta = (x[z1:] + y[z2:])
 
         tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        self.graficar('X[n-z] y Y[n-z]',tiempo,rta)
 
     def punto10(self):
         x = self.onda1(self.freq1,self.a)
         y = self.onda2(self.freq2,self.a)
         
-        z1 = int(self.T2/4)
+        z1 = int(self.T1/4)
         x = x[z1:]
 
-        size = len(x)
-        if(size > len(y)):
-            size = len(y)
-
+        size = menorList([x,y])
         rta = [y[n]+x[n] for n in range(size)]
 
         tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        self.graficar('Y[n] + X[n-z]',tiempo,rta)
     
     def punto11(self):
         x = self.onda1(self.freq1,self.a)
@@ -222,17 +228,11 @@ class ejercicios:
         y = [y[n*2]*0.3 for n in range(int(len(y)/2))]
         x2 = [x[n*3]*0.2 for n in range(int(len(x)/3))]
 
-        size = len(x1)
-        if(size > len(y)):
-            size = len(y)
-        if(size > len(x2)):
-            size = len(x2)
-
+        size = menorList([x1,y,x2])
         rta = [x1[n]+y[n]+x2[n] for n in range(size)]
 
         tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        self.graficar('0.5 X[n] + 0.3 Y[2n] + 0.2 X[3n]',tiempo,rta)
 
     def punto12(self):
         x = self.onda1(self.freq1,self.a)
@@ -241,41 +241,32 @@ class ejercicios:
         z = int(self.T2/4)
         
         x1 = [n*0.5 for n in x[w:]]
-        y = [y[2*n-z]*0.3 for n in range(int(len(y[z:])/2))]
+        y = [y[2*n]*0.3 for n in range(int(len(y[z:])/2))]
         x2 = [x[3*n]*0.2 for n in range(int(len(x)/3))]
         
-        size = len(x1)
-        if(size > len(y)):
-            size = len(y)
-        if(size > len(x2)):
-            size = len(x2)
-
+        size = menorList([x1,y,x2])
         rta = [(x1[n]+y[n]+x2[n]) for n in range(size)]
 
         tiempo = np.linspace(0,3,len(rta))
-        plt.plot(tiempo,rta)
-        plt.show()
+        self.graficar('0.5 X[n-w] + 0.3 Y[2n-z] + 0.2 X[3n]',tiempo,rta)
 
 # RESPUESTAS #
 
 amplitud = DBtoBYTE(-6)
 
-#test = ondaSeno(400,1,amplitud)
-#plt.plot([i for i in range(len(test))],[-i for i in test])
-#plt.show()
-
 """ 1. X[n] = señal seno a 500Hz, y[n] = señal diente de sierra a 750Hz """
 
 primero = ejercicios(ondaSeno,500,ondaSierra,750,amplitud)
-primero.punto1()
-primero.punto2()
-primero.punto3()
-primero.punto4()
-primero.punto5()
-primero.punto6()
-primero.punto7()
-primero.punto8()
-primero.punto9()
-primero.punto10()
-primero.punto11()
-primero.punto12()
+primero.titulo = 'Señal seno a 500Hz y señal diente de sierra a 750Hz'
+#primero.punto1()
+#primero.punto2()
+#primero.punto3()
+#primero.punto4()
+#primero.punto5()
+#primero.punto6()
+#primero.punto7()
+#primero.punto8()
+#primero.punto9()
+#primero.punto10()
+#primero.punto11()
+#primero.punto12()
