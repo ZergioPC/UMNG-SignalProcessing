@@ -315,3 +315,27 @@ amplitud = DBtoBYTE(-6)
 primero = ejercicios(ondaSeno,500,ondaSierra,750,amplitud,"1")
 primero.titulo = 'Señal seno a 500Hz y señal diente de sierra a 750Hz'
 primero.resolver()
+
+""" 2. X[n] = señal cuadrada a 600Hz, y[n] = señal diente de sierra a 900Hz """
+
+segundo = ejercicios(ondaCuadrada,600,ondaSierra,900,amplitud,"2")
+segundo.titulo = 'Señal cuadrada a 600Hz y señal diente de sierra a 900Hz'
+segundo.resolver()
+
+""" 3. X[n] = señal triangular a 600Hz, y[n] = señal diente de sierra a 900Hz """
+
+tercero = ejercicios(ondaTriangulo,600,ondaSierra,900,amplitud,"3")
+tercero.titulo = 'Señal triangulo a 600Hz y señal diente de sierra a 900Hz'
+tercero.resolver()
+
+""" 4.X[n] = señal diente de sierra a 800Hz, y[n] = señal cuadrada a 400Hz  """
+
+cuarto = ejercicios(ondaSierra,800,ondaCuadrada,400,amplitud,"4")
+cuarto.titulo = 'Señal sierra a 800Hz y señal diente de cuadrado a 400Hz'
+cuarto.resolver()
+
+""" 5. X[n] = señal triangular a 1000Hz, y[n] = señal seno a 500Hz """
+
+quinto = ejercicios(ondaTriangulo,1000,ondaSeno,500,amplitud,"5")
+quinto.titulo = 'Señal sierra a 800Hz y señal diente de cuadrado a 400Hz'
+quinto.resolver()
