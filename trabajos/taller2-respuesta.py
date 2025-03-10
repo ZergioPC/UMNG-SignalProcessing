@@ -94,7 +94,7 @@ def ondaSierra(w,a,phi=0):
     return [i*a for i in s]
 
 class ejercicios:
-    def __init__(self,onda1,freq1,onda2,freq2,amplitud):
+    def __init__(self,onda1,freq1,onda2,freq2,amplitud,punto):
         self.onda1 = onda1
         self.onda2 = onda2
         self.freq1 = freq1
@@ -103,6 +103,11 @@ class ejercicios:
         self.T1 = int(44100/freq1)
         self.T2 = int(44100/freq2)
         self.titulo = ''
+        self.punto = punto
+
+    def renderAudio(self,onda,name):
+        onda_16bits = (np.array(onda)*32767).astype(np.int16)
+        wavfile.write(f'./audios/taller_02/{self.punto}/{name}.wav',44100,onda_16bits)
 
     def graficar(self,label,xData,yData):
         plt.figure(num="Taller 2 - Sergio Palacios") 
@@ -119,6 +124,7 @@ class ejercicios:
         rta = (x + y)
         tiempo = np.linspace(0,6,len(rta))
         self.graficar('X[n] y Y[n]',tiempo,rta)
+        self.renderAudio(rta,'a_X[n] y Y[n]')
     
     def punto2(self):
         x = self.onda1(self.freq1,self.a)
@@ -129,6 +135,7 @@ class ejercicios:
         
         tiempo = np.linspace(0,6,len(rta))
         self.graficar('X[-n] y Y[-n]',tiempo,rta)
+        self.renderAudio(rta,'b_X[-n] y Y[-n]')
     
     def punto3(self):
         x = self.onda1(self.freq1,self.a)
@@ -141,6 +148,7 @@ class ejercicios:
         
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('X[2n] y Y[2n]',tiempo,rta)
+        self.renderAudio(rta,'c_X[2n] y Y[2n]')
 
     def punto4(self):
         x = self.onda1(self.freq1,self.a)
@@ -153,18 +161,20 @@ class ejercicios:
         
         tiempo = np.linspace(0,2,len(rta))
         self.graficar('X[3n] y Y[3n]',tiempo,rta)
+        self.renderAudio(rta,'d_X[3n] y Y[3n]')        
 
     def punto5(self):
         x = self.onda1(self.freq1,self.a)
-        x = [x[int(n/2)] for n in range(int(len(x)/2))]
+        x = [x[int(n/2)] for n in range(int(len(x)*2))]
 
         y = self.onda2(self.freq2,self.a)
-        y = [y[int(n/2)] for n in range(int(len(y)/2))]
+        y = [y[int(n/2)] for n in range(int(len(y)*2))]
 
         rta = (x + y)
         
         tiempo = np.linspace(0,12,len(rta))
         self.graficar('X['+r'$\frac{n}{2}$'+'] y Y['+r'$\frac{n}{2}$'+']',tiempo,rta)
+        self.renderAudio(rta,'e_X[n÷2] y Y[n÷2]')
     
     def punto6(self):
         x = self.onda1(self.freq1,self.a)
@@ -175,6 +185,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('X[n] + Y[n]',tiempo,rta)
+        self.renderAudio(rta,'f_X[n] + Y[n]')
 
     def punto7(self):
         x = self.onda1(self.freq1,self.a)
@@ -186,6 +197,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,5.5,len(rta))
         self.graficar('X[n] + X[2n] + X[3n]',tiempo,rta)
+        self.renderAudio(rta,'g_X[n] + X[2n] + X[3n]')
 
     def punto8(self):
         x = self.onda1(self.freq1,self.a)
@@ -195,6 +207,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,6,len(rta))
         self.graficar('0.5 X[n] y 0.5 Y[n]',tiempo,rta)
+        self.renderAudio(rta,'h_0.5·X[n] y 0.5·Y[n]')
     
     def punto9(self):
         x = self.onda1(self.freq1,self.a)
@@ -206,6 +219,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('X[n-z] y Y[n-z]',tiempo,rta)
+        self.renderAudio(rta,'i_X[n-z] y Y[n-z]')
 
     def punto10(self):
         x = self.onda1(self.freq1,self.a)
@@ -219,6 +233,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('Y[n] + X[n-z]',tiempo,rta)
+        self.renderAudio(rta,'j_Y[n] + X[n-z]')
     
     def punto11(self):
         x = self.onda1(self.freq1,self.a)
@@ -233,6 +248,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('0.5 X[n] + 0.3 Y[2n] + 0.2 X[3n]',tiempo,rta)
+        self.renderAudio(rta,'k_0.5·X[n] + 0.3·Y[2n] + 0.2·X[3n]')
 
     def punto12(self):
         x = self.onda1(self.freq1,self.a)
@@ -249,6 +265,7 @@ class ejercicios:
 
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('0.5 X[n-w] + 0.3 Y[2n-z] + 0.2 X[3n]',tiempo,rta)
+        self.renderAudio(rta,'l_0.5·X[n-w] + 0.3·Y[2n-z] + 0.2·X[3n]')
 
 # RESPUESTAS #
 
@@ -256,7 +273,7 @@ amplitud = DBtoBYTE(-6)
 
 """ 1. X[n] = señal seno a 500Hz, y[n] = señal diente de sierra a 750Hz """
 
-primero = ejercicios(ondaSeno,500,ondaSierra,750,amplitud)
+primero = ejercicios(ondaSeno,500,ondaSierra,750,amplitud,"1")
 primero.titulo = 'Señal seno a 500Hz y señal diente de sierra a 750Hz'
 #primero.punto1()
 #primero.punto2()
