@@ -192,6 +192,12 @@ class ejercicios:
         x2 = [x[2*n] for n in range(int(len(x)/2))]
         x3 = [x[3*n] for n in range(int(len(x)/3))]
 
+        for n in range(len(x)-len(x2)):
+            x2.append(0)
+        
+        for n in range(len(x)-len(x3)):
+            x3.append(0)
+
         size = menorList([x,x2,x3])
         rta = [(x[n]+x2[n]+x3[n]) for n in range(size)]
 
@@ -228,6 +234,9 @@ class ejercicios:
         z1 = int(self.T1/4)
         x = x[z1:]
 
+        for n in range(len(y)-len(x)):
+            x.append(0)
+
         size = menorList([x,y])
         rta = [y[n]+x[n] for n in range(size)]
 
@@ -242,6 +251,12 @@ class ejercicios:
         x1 = [n*0.5 for n in x]
         y = [y[n*2]*0.3 for n in range(int(len(y)/2))]
         x2 = [x[n*3]*0.2 for n in range(int(len(x)/3))]
+
+        for n in range(len(x)-len(y)):
+            y.append(0)
+        
+        for n in range(len(x)-len(x2)):
+            x2.append(0)
 
         size = menorList([x1,y,x2])
         rta = [x1[n]+y[n]+x2[n] for n in range(size)]
@@ -259,13 +274,37 @@ class ejercicios:
         x1 = [n*0.5 for n in x[w:]]
         y = [y[2*n]*0.3 for n in range(int(len(y[z:])/2))]
         x2 = [x[3*n]*0.2 for n in range(int(len(x)/3))]
+
+        for n in range(len(x)-len(x1)):
+            x1.append(0)
         
+        for n in range(len(x)-len(y)):
+            y.append(0)
+
+        for n in range(len(x)-len(x2)):
+            x2.append(0)
+
         size = menorList([x1,y,x2])
         rta = [(x1[n]+y[n]+x2[n]) for n in range(size)]
 
         tiempo = np.linspace(0,3,len(rta))
         self.graficar('0.5 X[n-w] + 0.3 Y[2n-z] + 0.2 X[3n]',tiempo,rta)
         self.renderAudio(rta,'l_0.5·X[n-w] + 0.3·Y[2n-z] + 0.2·X[3n]')
+
+    def resolver(self):
+        self.punto1()
+        self.punto2()
+        self.punto3()
+        self.punto4()
+        self.punto5()
+        self.punto6()
+        self.punto7()
+        self.punto8()
+        self.punto9()
+        self.punto10()
+        self.punto11()
+        self.punto12()
+
 
 # RESPUESTAS #
 
@@ -275,15 +314,4 @@ amplitud = DBtoBYTE(-6)
 
 primero = ejercicios(ondaSeno,500,ondaSierra,750,amplitud,"1")
 primero.titulo = 'Señal seno a 500Hz y señal diente de sierra a 750Hz'
-#primero.punto1()
-#primero.punto2()
-#primero.punto3()
-#primero.punto4()
-#primero.punto5()
-#primero.punto6()
-#primero.punto7()
-#primero.punto8()
-#primero.punto9()
-#primero.punto10()
-#primero.punto11()
-#primero.punto12()
+primero.resolver()
