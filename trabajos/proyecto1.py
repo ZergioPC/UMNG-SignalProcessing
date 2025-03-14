@@ -89,100 +89,276 @@ def ondaSierra(w,T,a):
 def ondaSilencio(w,T,a):
     return [0 for i in range(int(44100*T))]
 
-def ondaDrums(T,snare):                 #Crea la onda de un Kick y un Kick/Snare
-    Fm = 44100
-    onda1 = []
-    onda2 = []
-    for t in range(int(Fm*T)):
-        aux = (np.sin((2*np.pi/Fm)*104*t))
-        aux2 = (np.sin((2*np.pi/Fm)*134*t))
-        aux2 = 0.4 if(aux2 >0) else -0.4
-        onda1.append(aux)
-        onda2.append(aux2)
-    onda = np.array(onda1)+np.array(onda2) if snare else np.array(onda1)
-    nota = np.linspace(1,0,2000)
-    kick = np.zeros(len(onda))
-    kick[:len(nota)] = nota   
-    return onda*kick
-
-def melody(array,nota,bpm,n,octava,onda,v=0.7):
+def melody(array,nota,bpm,n,octava,onda,v=0.2):
     w = frecuenciaMusical(nota,octava)
     t = tempo(bpm,n)
 
     return np.concatenate((array,onda(w,t,a=v)))
 
-def drums(bpm,compaces):                #Crea un loop de bateria a 4/4
-    t = tempo(bpm,2)
-    kick = ondaDrums(t,False)
-    snare = ondaDrums(t,True)
-    onda = np.concatenate((kick,snare))
-    onda = np.tile(onda,2)
-    return np.tile(onda,compaces)
+def acorde(array,notas,bpm,n,octava,onda,v=0.7):
+    w1 = frecuenciaMusical(notas[0],octava)
+    w2 = frecuenciaMusical(notas[1],octava)
+    w3 = frecuenciaMusical(notas[2],octava)
+    t = tempo(bpm,n)
+
+    first = np.array(onda(w1,t,a=v))
+    third = np.array(onda(w2,t,a=v))
+    five = np.array(onda(w3,t,a=v))
+
+    onda = first+third+five
+
+    return np.concatenate((array,onda))
 
 """
 CANCIÓN: ASGORE (Undertale OST)
 Autor: Toby Fox
 """
 compaz = 115
-lead = []
 
 #Parte 1
 lead_parte1 = []
+sublead_parte1 = []
 
-lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,2,0,ondaSilencio)
-lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,2,0,ondaSilencio)
-
-def letmotive1(array):
-    array = melody(array,notas_musicales["mi"],compaz,4,3,ondaCuadrada)
+def letmotive1(array,onda,octava=0):
+    array = melody(array,notas_musicales["mi"],compaz,4,3+octava,onda)
     array = melody(array,notas_musicales["do"],compaz,4,0,ondaSilencio)
-    array = melody(array,notas_musicales["sol#"],compaz,4,3,ondaCuadrada)
+    array = melody(array,notas_musicales["sol#"],compaz,4,3+octava,onda)
     array = melody(array,notas_musicales["do"],compaz,4,0,ondaSilencio)
 
-    array = melody(array,notas_musicales["fa#"],compaz,2,3,ondaCuadrada)
+    array = melody(array,notas_musicales["fa#"],compaz,2,3+octava,onda)
     array = melody(array,notas_musicales["do"],compaz,4,0,ondaSilencio)
-    array = melody(array,notas_musicales["sol#"],compaz,4,3,ondaCuadrada)
-    array = melody(array,notas_musicales["do#"],compaz,4,3,ondaCuadrada)
-    array = melody(array,notas_musicales["do#"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["re#"],compaz,4,3,ondaCuadrada)
-    array = melody(array,notas_musicales["re#"],compaz,8,3,ondaCuadrada)
+    array = melody(array,notas_musicales["sol#"],compaz,4,3+octava,onda)
+    array = melody(array,notas_musicales["do#"],compaz,4,3+octava,onda)
+    array = melody(array,notas_musicales["do#"],compaz,8,3+octava,onda)
+    array = melody(array,notas_musicales["re#"],compaz,4,3+octava,onda)
+    array = melody(array,notas_musicales["re#"],compaz,8,3+octava,onda)
     return array
 
-lead_parte1 = letmotive1(lead_parte1)
-lead_parte1 = melody(lead_parte1,notas_musicales["mi"],compaz,4,3,ondaCuadrada)
-lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,2,3,ondaCuadrada)
-lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,4,3,ondaCuadrada)
+ondaActual = ondaCuadrada
+lead_parte1 = letmotive1(lead_parte1,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["mi"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,2,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
 lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
 
-lead_parte1 = letmotive1(lead_parte1)
+lead_parte1 = letmotive1(lead_parte1,ondaActual)
 
-lead_parte1 = melody(lead_parte1,notas_musicales["si"],compaz,4,3,ondaCuadrada)
-lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,2,3,ondaCuadrada)
-lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,4,3,ondaCuadrada)
+lead_parte1 = melody(lead_parte1,notas_musicales["si"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,2,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
 lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+lead_parte1 = melody(lead_parte1,notas_musicales["la"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+lead_parte1 = melody(lead_parte1,notas_musicales["si"],compaz,2,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+lead_parte1 = melody(lead_parte1,notas_musicales["do#"],compaz,4,4,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["mi"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["mi"],compaz,8,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["fa#"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["fa#"],compaz,8,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["si"],compaz,2,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["si"],compaz,4,3,ondaActual)
+
+lead_parte1 = melody(lead_parte1,notas_musicales["do#"],compaz,4,4,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["re#"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["re#"],compaz,8,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["re#"],compaz,4,4,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["re#"],compaz,8,4,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["si"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,1,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,2,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+lead_parte1 = melody(lead_parte1,notas_musicales["la"],compaz,8,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["sol#"],compaz,8,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["fa#"],compaz,2,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["fa#"],compaz,4,3,ondaActual)
+lead_parte1 = melody(lead_parte1,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+ondaActual = ondaSilencio
+sublead_parte1 = letmotive1(sublead_parte1,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["mi"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,2,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+sublead_parte1 = letmotive1(sublead_parte1,ondaActual)
+
+sublead_parte1 = melody(sublead_parte1,notas_musicales["si"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,2,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+ondaActual = ondaSierra
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["la"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+sublead_parte1 = melody(sublead_parte1,notas_musicales["si"],compaz,2,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do#"],compaz,4,4,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["mi"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["mi"],compaz,8,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["fa#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["fa#"],compaz,8,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["si"],compaz,2,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["si"],compaz,4,3,ondaActual)
+
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do#"],compaz,4,4,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["re#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["re#"],compaz,8,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["re#"],compaz,4,4,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["re#"],compaz,8,4,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["si"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,1,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,2,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+sublead_parte1 = melody(sublead_parte1,notas_musicales["la"],compaz,8,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["sol#"],compaz,8,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["fa#"],compaz,2,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["fa#"],compaz,4,3,ondaActual)
+sublead_parte1 = melody(sublead_parte1,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+## octava mas abajo
+lead2_parte1 = []
+ondaActual = ondaCuadrada
+lead2_parte1 = letmotive1(lead2_parte1,ondaActual,octava=-1)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["mi"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,2,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+lead2_parte1 = letmotive1(lead2_parte1,ondaActual,octava=-1)
+
+lead2_parte1 = melody(lead2_parte1,notas_musicales["si"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,2,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["la"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+lead2_parte1 = melody(lead2_parte1,notas_musicales["si"],compaz,2,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do#"],compaz,4,3,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["mi"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["mi"],compaz,8,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["fa#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["fa#"],compaz,8,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["si"],compaz,2,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["si"],compaz,4,2,ondaActual)
+
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do#"],compaz,4,3,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["re#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["re#"],compaz,8,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["re#"],compaz,4,3,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["re#"],compaz,8,3,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["si"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,1,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,2,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+lead2_parte1 = melody(lead2_parte1,notas_musicales["la"],compaz,8,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["sol#"],compaz,8,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["fa#"],compaz,2,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["fa#"],compaz,4,2,ondaActual)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+lead2_parte1 = melody(lead2_parte1,notas_musicales["mi"],compaz,4,3,ondaCuadrada)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["re#"],compaz,4,3,ondaCuadrada)
+lead2_parte1 = melody(lead2_parte1,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+sublead_parte2 = []
+ondaActual = ondaSilencio
+sublead_parte2 = letmotive1(sublead_parte2,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["mi"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,2,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+sublead_parte2 = letmotive1(sublead_parte2,ondaActual)
+
+sublead_parte2 = melody(sublead_parte2,notas_musicales["si"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,2,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+ondaActual = ondaSierra
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["la"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
+
+sublead_parte2 = melody(sublead_parte2,notas_musicales["si"],compaz,2,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do#"],compaz,4,4,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["mi"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["mi"],compaz,8,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["fa#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["fa#"],compaz,8,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["si"],compaz,2,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["si"],compaz,4,3,ondaActual)
+
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do#"],compaz,4,4,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["re#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["re#"],compaz,8,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["re#"],compaz,4,4,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["re#"],compaz,8,4,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["si"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,1,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,2,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,2,ondaSilencio)
+
+sublead_parte2 = melody(sublead_parte2,notas_musicales["la"],compaz,8,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,8,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["fa#"],compaz,2,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["fa#"],compaz,4,3,ondaActual)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,2,ondaSilencio)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,1,ondaSilencio)
+
+sublead_parte2 = melody(sublead_parte2,notas_musicales["mi"],compaz,4,3,ondaCuadrada)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["sol#"],compaz,4,3,ondaCuadrada)
+sublead_parte2 = melody(sublead_parte2,notas_musicales["do"],compaz,4,0,ondaSilencio)
 
 #Parte 2
 
 lead_parte2 = []
-def letmotive2(array):
-    array = melody(array,notas_musicales["do#"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["mi"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["re#"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["mi"],compaz,8,3,ondaCuadrada)
+def letmotive2(array,onda):
+    array = melody(array,notas_musicales["do#"],compaz,8,3,onda)
+    array = melody(array,notas_musicales["mi"],compaz,8,3,onda)
+    array = melody(array,notas_musicales["re#"],compaz,8,3,onda)
+    array = melody(array,notas_musicales["mi"],compaz,8,3,onda)
 
-    array = melody(array,notas_musicales["do#"],compaz,4,3,ondaCuadrada)
+    array = melody(array,notas_musicales["do#"],compaz,4,3,onda)
     array = melody(array,notas_musicales["do#"],compaz,8,3,ondaSilencio)
 
-    array = melody(array,notas_musicales["do#"],compaz,4,3,ondaCuadrada)
-    array = melody(array,notas_musicales["re#"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["mi"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["si"],compaz,8,3,ondaCuadrada)
-    array = melody(array,notas_musicales["sol#"],compaz,4,3,ondaCuadrada)
+    array = melody(array,notas_musicales["do#"],compaz,4,3,onda)
+    array = melody(array,notas_musicales["re#"],compaz,8,3,onda)
+    array = melody(array,notas_musicales["mi"],compaz,8,3,onda)
+    array = melody(array,notas_musicales["si"],compaz,8,3,onda)
+    array = melody(array,notas_musicales["sol#"],compaz,4,3,onda)
     array = melody(array,notas_musicales["do#"],compaz,4,3,ondaSilencio)
     return array
 
-lead_parte2 = letmotive2(lead_parte2)
-lead_parte2 = letmotive2(lead_parte2)
-lead_parte2 = letmotive2(lead_parte2)
+lead_parte2 = letmotive2(lead_parte2,ondaCuadrada)
+lead_parte2 = letmotive2(lead_parte2,ondaCuadrada)
+lead_parte2 = letmotive2(lead_parte2,ondaCuadrada)
 
 lead_parte2 = melody(lead_parte2,notas_musicales["si"],compaz,8,2,ondaCuadrada)
 lead_parte2 = melody(lead_parte2,notas_musicales["si"],compaz,4,2,ondaCuadrada)
@@ -197,7 +373,97 @@ lead_parte2 = melody(lead_parte2,notas_musicales["re#"],compaz,4,3,ondaCuadrada)
 
 lead_parte2 = np.tile(lead_parte2,2)
 
-#ondak = drums(90)
-ondak = lead_parte1
-onda_16bits = (np.array(ondak)*32767).astype(np.int16)
-wavfile.write(f'./audios/proyecto_01/lead.wav',44100,onda_16bits)
+lead_parte3 = []
+lead_parte3 = letmotive2(lead_parte3,ondaSierra)
+lead_parte3 = letmotive2(lead_parte3,ondaSierra)
+lead_parte3 = letmotive2(lead_parte3,ondaSierra)
+
+lead_parte3 = melody(lead_parte3,notas_musicales["si"],compaz,8,2,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["si"],compaz,4,2,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["fa#"],compaz,8,3,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["fa#"],compaz,4,3,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["mi"],compaz,4,3,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["re#"],compaz,8,3,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["do#"],compaz,4,3,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["si"],compaz,4,2,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["si"],compaz,8,2,ondaSierra)
+lead_parte3 = melody(lead_parte3,notas_musicales["re#"],compaz,4,3,ondaSierra)
+
+lead_parte3 = np.tile(lead_parte3,2)
+
+leadA = lead_parte1[:len(sublead_parte1)]+sublead_parte1
+leadB = lead2_parte1+sublead_parte2[:len(lead2_parte1)]
+
+chord1 = []
+
+chord1 = acorde(chord1,[notas_musicales["do"],notas_musicales["mi"],notas_musicales["sol"]],compaz,1,3,ondaSeno,v=0.0)
+chord1 = acorde(chord1,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["do#"],notas_musicales["mi"],notas_musicales["sol#"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["do#"],notas_musicales["mi"],notas_musicales["sol#"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["fa#"],notas_musicales["la"],notas_musicales["do#"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["sol#"],notas_musicales["si"],notas_musicales["re#"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,0,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["si"],notas_musicales["re#"],notas_musicales["fa#"]],compaz,1,2,ondaSeno,v=0.2)
+chord1 = acorde(chord1,[notas_musicales["si"],notas_musicales["re#"],notas_musicales["fa#"]],compaz,1,2,ondaSeno,v=0.2)
+
+chord1 = np.tile(chord1,2)
+
+chord1 = acorde(chord1,[notas_musicales["si"],notas_musicales["re#"],notas_musicales["fa#"]],compaz,1,2,ondaSeno,v=0.0)
+
+chord2 = []
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["si"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.0)
+
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["si"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,8,2,ondaSeno,v=0.0)
+
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,4,2,ondaSeno,v=0.0)
+chord2 = acorde(chord2,[notas_musicales["mi"],notas_musicales["do#"],notas_musicales["sol#"]],compaz,8,2,ondaSeno,v=0.0)
+
+chord2 = acorde(chord2,[notas_musicales["sol#"],notas_musicales["si"],notas_musicales["re#"]],compaz,1,2,ondaSeno,v=0.2)
+chord2 = acorde(chord2,[notas_musicales["la"],notas_musicales["do#"],notas_musicales["mi"]],compaz,1,2,ondaSeno,v=0.2)
+
+onda1 = leadA+chord1[:len(leadA)]
+onda2 = leadB+chord1[:len(leadB)]
+
+onda3 = lead_parte2[:len(chord2)]+chord2
+onda3 = np.tile(onda3,2)
+
+onda4 = lead_parte3[:len(chord2)]+chord2
+onda4 = np.tile(onda4,2)
+
+onda = np.concatenate((onda1,onda2,onda3,onda4))
+
+onda_16bits = (np.array(onda)*32767).astype(np.int16)
+wavfile.write(f'./audios/proyecto_01/proyecto_1-SergioPalacios.wav',44100,onda_16bits)
