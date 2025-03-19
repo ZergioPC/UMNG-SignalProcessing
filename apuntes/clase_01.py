@@ -10,6 +10,9 @@ mplt.stem(X,Y) discretas
 x = [i+2 for i in range(10) if i%2== 0]
     [haz esto for este rango si esto se cumple]
 
+x = [n if n != 4 else 1 for n in range(5)]
+    [condicional for este rango]
+
 """
 # Librerías requerídas
 import numpy as np

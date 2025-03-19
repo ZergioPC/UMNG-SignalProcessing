@@ -9,16 +9,12 @@
 """
 import numpy as np
 
-def invertLista(lista):
-    
-    return lista
-
 def normalizar(lista):
     max = 0
     for n in lista:
         if ( np.abs(n) > max):
             max = n
-    return [n for n in lista]
+    return [(n/max) for n in lista]
 
 def convolucion(xn,hn):
     x = normalizar(xn)
@@ -50,7 +46,7 @@ def convolucion(xn,hn):
         y.append(Aux)
 
     #Convolución cuando len(h)+T > len(x[n+T])
-    for n in np.linspace(len(b)-1,0,len(b)):
+    for n in np.linspace(len(h)-1,0,len(h)):
         xAux = x[-(int(n)+1):]    
         hAux = h[:(int(n)+1)]  
         yAux = []           # Lista de resultado de multiplicaciones
