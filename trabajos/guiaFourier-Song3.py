@@ -43,7 +43,7 @@ bajo_fa = generarBajo(notas["fa"],0)
 bajo_la = generarBajo(notas["la"],0)
 
 #   INTRO
-"""
+
 print("Compilando Intro")
 
 for _ in range(32):
@@ -191,7 +191,6 @@ mix = np.concatenate((mix,mix))
 
 song = np.concatenate((song,mix))
 
-"""
 def aux_Arp(n1:float, o1:float, n2:float, o2:float, n3:float, o3:float, n4:float, o4:int) -> list:
     a = []
     a = np.concatenate((a,music.seriefourier(n1,o1,music.tempo(bpm,8),vst1,0.7,sustain)))
@@ -267,6 +266,8 @@ for _ in range(9):
     drums = np.concatenate((drums,music.drumClip(snare,music.tempo(bpm,2))))
 
 ondaAux = music.normalizar([onda1[i]+onda2[i] for i in range(int(compaz*music.FM))])
-mix = music.normalizar([bass[i]+drums[i]+ondaAux for i in range(int(compaz*music.FM))])
+mix = music.normalizar([bass[i]+drums[i]+ondaAux[i] for i in range(int(compaz*music.FM))])
 
-music.renderAudio(mix,"canción_3_A")
+song = np.concatenate((song,mix))
+
+music.renderAudio(song,"canción_3_A")
