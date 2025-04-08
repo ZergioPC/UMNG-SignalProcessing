@@ -33,13 +33,13 @@ class FourierMusicalClass:
 
         # FUNCIONES AUXILIARES
 
-    def leerAudio(self, audio:str) -> list:
+    def leerAudio(self, audio:str) -> tuple[list, list]:
         ruta = os.path.realpath(__file__)
         data_dir = os.path.join(os.path.dirname(ruta),'guiaFourier-audios')
         wav_fname = os.path.join(data_dir, audio)
         return wavfile.read(wav_fname)
 
-    def normalizar(self, lista:list) -> list:
+    def normalizar(self, lista:list) -> list[float]:
         """
         Normaliza la lista manualmente
         """
@@ -67,6 +67,7 @@ class FourierMusicalClass:
         2: Negra
         3: Negra con Puntillo
         4: Corchea
+        5: Corchea con Puntillo
         8: Semicorchea
         Sí el compáz es a 3/4, agregar un 1 al principio : 10 u 11 ..
         """
@@ -80,8 +81,12 @@ class FourierMusicalClass:
             tiempo = 60*((44100)+(0.5*44100))/bpm
         elif(n==4):
             tiempo = (0.5*(44100*60))/bpm
+        elif(n==5):
+            tiempo = 60*((0.5*44100)+(0.25*44100))/bpm
         elif(n==8):
             tiempo = (0.25*(44100*60))/bpm
+        elif(n==9):
+            tiempo = (0.125*(44100*60))/bpm
         elif(n==10):
             tiempo = (4*(44100*80))/bpm
         elif(n==11):
@@ -92,12 +97,14 @@ class FourierMusicalClass:
             tiempo = 80*((44100)+(0.5*44100))/bpm
         elif(n==14):
             tiempo = (0.5*(44100*80))/bpm
+        elif(n==15):
+            tiempo = 80*((0.5*44100)+(0.25*44100))/bpm
         elif(n==18):
             tiempo = (0.25*(44100*80))/bpm
         
         return tiempo/self.FM
 
-    def seriefourier(self, nota:float,  octava:int,  T:float,  instrumento:list,  vol:int=1, sustain:bool=True) -> list:
+    def seriefourier(self, nota:float,  octava:int,  T:float,  instrumento:list,  vol:float=1, sustain:bool=True) -> list[float]:
         """ 
         Serie de Armónicos de Fourier para obtener el
         timbre de un instrumento
